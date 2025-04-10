@@ -1,3 +1,4 @@
+import { data } from "./data";
 import "./index.css"
 
 function App() {
@@ -22,9 +23,9 @@ function Form() {
     <form>
       <input type="text" placeholder="Ürün adını giriniz" />
       <select>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
+        {Array.from({length:10},(v,i) => i + 1)
+        .map(num => <option key={num} value={num}>{num}</option>)
+        }
       </select>
       <button type="submit">Ekle</button>
      </form>
@@ -34,17 +35,17 @@ function Form() {
 function List() {
   return (
     <div className="list">
-       <Item />
-       <Item />
-       <Item />
+      {data.map((i, index) => (
+        <Item item={i} key={index}/>
+      ))}
     </div>
   );
 }
 
-function Item() {
+function Item({item}) {
   return (
     <li>
-      <span>Yumurta</span>
+      <span style={item.completed ? {textDecoration:"line-through"} : {}}>{item.quantity} {item.title}</span>
       <button>X</button>
     </li>
   );
