@@ -1,12 +1,18 @@
-import { data } from "./data";
+import { useState } from "react";
 import "./index.css"
 
 function App() {
+  const [items,setItems] = useState([]);
+
+  function handleAddItem(item) {
+    setItems((items) => [...items, item]);
+
+  }
   return (
     <div className="app">
     <Header/>
-    <Form />
-    <List />
+    <Form onAddItem={handleAddItem}/>
+    <List items={items}/>
     <Summary />
     </div>
   );
@@ -18,11 +24,26 @@ function Header() {
   );
 }
 
-function Form() {
+function Form({onAddItem}) {
+
+  const [title, setTitle] = useState("aaa");
+  const [quantity, setQuantity] = useState(1);
+  
+  function handleFormSubmit(e) {
+
+    e.preventDefault();
+    const item = {id: Date.now(), title, quantity, completed:false};
+    console.log(item);
+
+    onAddItem(item);
+    setTitle('');
+    setQuantity(1);
+  }
+
   return (
-    <form>
-      <input type="text" placeholder="Ürün adını giriniz" />
-      <select>
+    <form className="form" onSubmit={handleFormSubmit}>
+      <input type="text" placeholder="Ürün adını giriniz" value={title} onChange={(e) => setTitle(e.target.value)} />
+      <select value={quantity} onChange={(e) => setQuantity(Number(e.target.value))}>
         {Array.from({length:10},(v,i) => i + 1)
         .map(num => <option key={num} value={num}>{num}</option>)
         }
@@ -32,10 +53,10 @@ function Form() {
   );
 }
 
-function List() {
+function List({items}) {
   return (
     <div className="list">
-      {data.map((i, index) => (
+      {items.map((i, index) => (
         <Item item={i} key={index}/>
       ))}
     </div>
