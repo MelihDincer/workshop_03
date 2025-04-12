@@ -1,18 +1,22 @@
 import { useState } from "react";
+import { data } from "./data";
 import "./index.css"
 
 function App() {
-  const [items,setItems] = useState([]);
+  const [items,setItems] = useState(data);
 
   function handleAddItem(item) {
     setItems((items) => [...items, item]);
+  }
 
+  function handleDeleteItem(id) {
+    setItems((items) => items.filter(item => item.id !== id));
   }
   return (
     <div className="app">
     <Header/>
     <Form onAddItem={handleAddItem}/>
-    <List items={items}/>
+    <List items={items} deleteHandle={handleDeleteItem}/>
     <Summary />
     </div>
   );
@@ -53,21 +57,26 @@ function Form({onAddItem}) {
   );
 }
 
-function List({items}) {
+function List({items, deleteHandle}) {
+  
   return (
-    <div className="list">
+    <>
+    {items.length > 0 ?
+    (<div className="list">
       {items.map((i, index) => (
-        <Item item={i} key={index}/>
+        <Item item={i} key={index} deleteHandle={deleteHandle}/>
       ))}
-    </div>
+    </div>) : <p>No Items.</p> }
+    </>
+    
   );
 }
 
-function Item({item}) {
+function Item({item,deleteHandle}) {
   return (
     <li>
       <span style={item.completed ? {textDecoration:"line-through"} : {}}>{item.quantity} {item.title}</span>
-      <button>X</button>
+      <button onClick={() => deleteHandle(item.id)}>X</button>
     </li>
   );
 }
