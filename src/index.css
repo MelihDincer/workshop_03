@@ -18,6 +18,10 @@ body {
   grid-template-rows: auto auto 1fr auto;
 }
 
+input[type="checkbox"] {
+  margin-right: 5px;
+}
+
 h1 {
   padding: 1rem;
   background: #4527A0;
